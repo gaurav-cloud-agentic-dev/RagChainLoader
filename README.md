@@ -26,22 +26,51 @@ It provides an end-to-end workflow:
 
 ## 📦 Installation & Setup
 
-### 1. Install Python dependencies
+### 1. Install Python Dependencies
 
-Install all required LangChain, Qdrant, OpenAI, and PDF-processing libraries.
+Install all required packages using:
 
-### 2. Start Qdrant via Docker
+```
+pip install -qU langchain-qdrant
+pip install -qU langchain-openai
+pip install -qU langchain-text-splitters
+pip install -qU langchain-community
+pip install pypdf
+pip install python-dotenv
+pip install openai
+```
 
-Run Qdrant locally using Docker Compose.  
-It should be available at:
+You may also install everything together:
+
+```
+pip install -qU langchain-qdrant langchain-openai langchain-text-splitters langchain-community pypdf python-dotenv openai
+```
+
+---
+
+### 2. Start Qdrant Using Docker
+
+Download and run Qdrant locally:
+
+```
+docker compose up -d
+```
+
+Qdrant will be available at:
 
 ```
 http://localhost:6333
 ```
 
-### 3. Add your OpenAI API key
+---
 
-Create a `.env` file and add your `OPENAI_API_KEY`.
+### 3. Add Your OpenAI API Key
+
+Create a `.env` file and add:
+
+```
+OPENAI_API_KEY=your_api_key_here
+```
 
 ---
 
@@ -73,7 +102,7 @@ This script:
 
 This file is responsible for **building** the vector index.
 
-You run it **once** (or whenever you change the PDF).
+Run it **once**, or whenever you update the PDF.
 
 ---
 
@@ -84,14 +113,14 @@ This script:
 1. Connects to the existing Qdrant collection created by `index.py`
 2. Converts your question into an embedding  
 3. Retrieves the most similar chunks from Qdrant  
-4. Builds a context block that includes:
-   - page content  
-   - page number  
-   - source PDF path  
-5. Sends both your question and the retrieved context to `gpt-4o-mini`
-6. Returns a grounded answer referring to the correct page number  
+4. Builds a context block containing:
+   - Page content  
+   - Page number  
+   - Source PDF path  
+5. Sends the context + user question to `gpt-4o-mini`
+6. Returns a grounded answer pointing to the correct page  
 
-This file is used every time you want to **query your documents**.
+Use this file every time you want to **query your documents**.
 
 ---
 
@@ -100,35 +129,35 @@ This file is used every time you want to **query your documents**.
 Stores:
 
 - Your OpenAI API key  
-- Any other optional configs  
+- Any additional configuration needed  
 
 ---
 
 ### **node-dev.pdf — Document for RAG**
 
-This is the PDF file being indexed and queried.
-
-You can replace it with any PDF you want.
+The PDF used for indexing and question answering.  
+You can replace it with your own document.
 
 ---
 
 ## 🧠 How the Workflow Looks
 
-1. **Run indexing once**  
-   Builds the vector store from the PDF.
+1. **Run `index.py` once**  
+   Builds the vector database from the PDF.
 
-2. **Run the chat script anytime**  
-   Retrieves relevant vector chunks → Sends them to the LLM →  
-   Returns an accurate answer based only on your document.
+2. **Run `chat.py` whenever you need answers**  
+   Retrieves the most relevant document chunks →  
+   Passes context to the LLM →  
+   Returns accurate, source-grounded answers.
 
 ---
 
 ## 🪄 Example Flow (Conceptual)
 
 - You ask: *"How does the Node.js event loop work?"*  
-- Qdrant returns the best matching chunks from the PDF  
+- Qdrant returns the best matching PDF chunks  
 - The LLM reads only that context  
-- It answers and tells you the exact **page number** to refer to  
+- It responds and tells you the related **page number**  
 
 ---
 
