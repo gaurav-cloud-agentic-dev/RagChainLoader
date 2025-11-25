@@ -26,7 +26,16 @@ It provides an end-to-end workflow:
 
 ## 📦 Installation & Setup
 
-### 1. Install Python Dependencies
+### 1. Clone the Repository
+
+```
+git clone https://github.com/gaurav-cloud-agentic-dev/RagChainLoader.git
+cd RagChainLoader
+```
+
+---
+
+### 2. Install Python Dependencies
 
 Install all required packages using:
 
@@ -48,7 +57,7 @@ pip install -qU langchain-qdrant langchain-openai langchain-text-splitters langc
 
 ---
 
-### 2. Start Qdrant Using Docker
+### 3. Start Qdrant Using Docker
 
 Download and run Qdrant locally:
 
@@ -64,7 +73,7 @@ http://localhost:6333
 
 ---
 
-### 3. Add Your OpenAI API Key
+### 4. Add Your OpenAI API Key
 
 Create a `.env` file and add:
 
